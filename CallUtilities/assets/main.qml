@@ -17,16 +17,117 @@
 import bb.cascades 1.2
 
 Page {
+    titleBar: TitleBar {
+        title: "Call utilities"
+    
+    }
     Container {
         Label {
-            // Localized text with the dynamic translation and locale updates support
-            text: qsTr("CallUtilities Service says Hello!") + Retranslate.onLocaleOrLanguageChanged
+            text: "Incomming calls"
+            textStyle.fontWeight: FontWeight.Bold
+            horizontalAlignment: HorizontalAlignment.Center
+            textFit.minFontSizeValue: 10.0
+            textFit.maxFontSizeValue: 15.0
+        
+        }
+        
+        Container {
+            horizontalAlignment: HorizontalAlignment.Fill
+            rightPadding: 10.0
+            leftPadding: 10.0
+            Container {
+                layout: DockLayout {
+                
+                }
+                horizontalAlignment: HorizontalAlignment.Fill
+                Label {
+                    text: "Vibrate on disconnect"
+                    verticalAlignment: VerticalAlignment.Center
+                    horizontalAlignment: HorizontalAlignment.Left
+                
+                }
+                ToggleButton {
+                    id: tggVibrateOnIncomingDisconnect
+                    horizontalAlignment: HorizontalAlignment.Right
+                    onCheckedChanged: {
+                    }
+                    layoutProperties: StackLayoutProperties {
+                    
+                    }
+                    verticalAlignment: VerticalAlignment.Center
+                
+                }
+            
+            }
+        
+        }
+        
+        Divider {
+        
+        }
+        Label {
+            text: "Outgoing calls"
+            textStyle.fontWeight: FontWeight.Bold
+            horizontalAlignment: HorizontalAlignment.Center
+            textFit.minFontSizeValue: 10.0
+            textFit.maxFontSizeValue: 15.0
+        
+        }
+        
+        Container {
+            horizontalAlignment: HorizontalAlignment.Fill
+            rightPadding: 10.0
+            leftPadding: 10.0
+            Container {
+                horizontalAlignment: HorizontalAlignment.Fill
+                layout: DockLayout {
+                
+                }
+                Label {
+                    text: "Vibrate on connect"
+                    verticalAlignment: VerticalAlignment.Center
+                
+                }
+                ToggleButton {
+                    id: tggVibrateOnOutgoingConnect
+                    horizontalAlignment: HorizontalAlignment.Right
+                    onCheckedChanged: {
+                    }
+                    verticalAlignment: VerticalAlignment.Center
+                
+                }
+            
+            }
+            Container {
+                layout: DockLayout {
+                
+                }
+                horizontalAlignment: HorizontalAlignment.Fill
+                topMargin: 10.0
+                Label {
+                    text: "Vibrate on disconnect"
+                    verticalAlignment: VerticalAlignment.Center
+                
+                }
+                ToggleButton {
+                    id: tggVibrateOnOutgoingDisconnect
+                    horizontalAlignment: HorizontalAlignment.Right
+                    onCheckedChanged: {
+                    }
+                    verticalAlignment: VerticalAlignment.Center
+                
+                }
+            
+            }
+        
+        }
+        Divider {
+        
         }
         Button {
-            text: qsTr("Resend Notification") + Retranslate.onLocaleOrLanguageChanged
-            onClicked: {
-                app.resendNotification();
-            }
+            text: "Close"
+            horizontalAlignment: HorizontalAlignment.Center
+        
         }
     }
 }
