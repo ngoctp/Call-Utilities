@@ -17,54 +17,39 @@
 #include "service.hpp"
 
 #include <bb/Application>
-#include <bb/platform/Notification>
-#include <bb/platform/NotificationDefaultApplicationSettings>
-#include <bb/system/InvokeManager>
+#include <bb/system/phone/Phone>
+#include <bb/system/phone/Call>
 
 #include <QTimer>
+#include <QDebug>
 
-using namespace bb::platform;
 using namespace bb::system;
+using namespace bb::system::phone;
 
 Service::Service() :
-        QObject(),
-        m_notify(new Notification(this)),
-        m_invokeManager(new InvokeManager(this))
+        QObject()
 {
-    m_invokeManager->connect(m_invokeManager, SIGNAL(invoked(const bb::system::InvokeRequest&)),
-            this, SLOT(handleInvoke(const bb::system::InvokeRequest&)));
+    bb::system::phone::Phone *phone = new Phone(this);
+    //phone->connect(phone, SIGNAL(callUpdatecallUpdated(bb::system::phone::Call)), this, SLOT(onCallUpdated(bb::system::phone::Call)));
+    bool ok = connect(phone, SIGNAL(callUpdated(const bb::system::phone::Call &)), this, SLOT(onCallUpdated(const bb::system::phone::Call &)));
+    qDebug() << "testttttttttttttttttttttttttttttttttttttttttt2 ";
+    qDebug() << "testttttttttttttttttttttttttttttttttttttttttt3 " << ok;
 
-    NotificationDefaultApplicationSettings settings;
-    settings.setPreview(NotificationPriorityPolicy::Allow);
-    settings.apply();
-
-    m_notify->setTitle("CallUtilities Service");
-    m_notify->setBody("CallUtilities service requires attention");
-
-    bb::system::InvokeRequest request;
-    request.setTarget("com.example.CallUtilities");
-    request.setAction("bb.action.START");
-    m_notify->setInvokeRequest(request);
-
-    onTimeout();
 }
 
-void Service::handleInvoke(const bb::system::InvokeRequest & request)
-{
-    if (request.action().compare("com.example.CallUtilitiesService.RESET") == 0) {
-        triggerNotification();
-    }
+void Service::onCallUpdated(const bb::system::phone::Call & call) {
+    CallState::Type state = call.callState();
+    qDebug() << "call updated: callId=" << call.callId() << " callState=" << state;
 }
 
-void Service::triggerNotification()
-{
-    // Timeout is to give time for UI to minimize
-    QTimer::singleShot(2000, this, SLOT(onTimeout()));
+void Service::onIncomingDisconnect() {
+
 }
 
-void Service::onTimeout()
-{
-    Notification::clearEffectsForAll();
-    Notification::deleteAllFromInbox();
-    m_notify->notify();
+void Service::onOutgoingConnect() {
+
+}
+
+void Service::onOutgoingDisconnect() {
+
 }

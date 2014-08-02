@@ -21,12 +21,11 @@
 
 namespace bb {
     class Application;
-    namespace platform {
-        class Notification;
-    }
     namespace system {
-        class InvokeManager;
-        class InvokeRequest;
+        namespace phone {
+            class Call;
+            class Phone;
+        }
     }
 }
 
@@ -37,14 +36,13 @@ public:
     Service();
     virtual ~Service() {}
 private slots:
-    void handleInvoke(const bb::system::InvokeRequest &);
-    void onTimeout();
+    void onCallUpdated(const bb::system::phone::Call &);
 
 private:
-    void triggerNotification();
+    void onIncomingDisconnect();
+    void onOutgoingConnect();
+    void onOutgoingDisconnect();
 
-    bb::platform::Notification * m_notify;
-    bb::system::InvokeManager * m_invokeManager;
 };
 
 #endif /* SERVICE_H_ */
