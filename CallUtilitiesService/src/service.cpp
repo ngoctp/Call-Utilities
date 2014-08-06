@@ -19,37 +19,59 @@
 #include <bb/Application>
 #include <bb/system/phone/Phone>
 #include <bb/system/phone/Call>
+#include <bb/system/phone/CallType>
+#include <bb/system/phone/CallState>
+#include <bb/device/VibrationController>
 
 #include <QTimer>
 #include <QDebug>
 
 using namespace bb::system;
 using namespace bb::system::phone;
+using namespace bb::device;
 
 Service::Service() :
         QObject()
 {
-    bb::system::phone::Phone *phone = new Phone(this);
-    //phone->connect(phone, SIGNAL(callUpdatecallUpdated(bb::system::phone::Call)), this, SLOT(onCallUpdated(bb::system::phone::Call)));
-    bool ok = connect(phone, SIGNAL(callUpdated(const bb::system::phone::Call &)), this, SLOT(onCallUpdated(const bb::system::phone::Call &)));
-    qDebug() << "testttttttttttttttttttttttttttttttttttttttttt2 ";
-    qDebug() << "testttttttttttttttttttttttttttttttttttttttttt3 " << ok;
-
+    Phone * phone = new Phone(this);
+    connect(phone, SIGNAL(callUpdated(const bb::system::phone::Call &)), this, SLOT(onCallUpdated(const bb::system::phone::Call &)));
 }
 
 void Service::onCallUpdated(const bb::system::phone::Call & call) {
+    CallType::Type type = call.callType();
     CallState::Type state = call.callState();
-    qDebug() << "call updated: callId=" << call.callId() << " callState=" << state;
+
+    qDebug() << "call updated: callId=" << call.callId() << " callType=" << type << " callState=" << state;
+
+    if (type == CallType::Incoming) {
+        if (state == CallState::Disconnected) {
+            onIncomingDisconnect();
+        }
+    }
+    else if (type == CallType::Outgoing) {
+        if (state == CallState::Connected) {
+            onOutgoingConnect();
+        }
+        else if (state == CallState::Disconnected) {
+            onOutgoingDisconnect();
+        }
+
+    }
+
 }
 
 void Service::onIncomingDisconnect() {
-
+    VibrationController vibration;
+    vibration.start(100, 200);
 }
 
 void Service::onOutgoingConnect() {
-
+    VibrationController vibration;
+    vibration.start(100, 200);
 }
 
 void Service::onOutgoingDisconnect() {
-
+    VibrationController vibration;
+    vibration.start(100, 200);
 }
+
