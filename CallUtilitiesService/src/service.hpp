@@ -35,13 +35,22 @@ class Service: public QObject
 public:
     Service();
     virtual ~Service() {}
+
 private slots:
-    void onCallUpdated(const bb::system::phone::Call &);
+    void onCallUpdated(const bb::system::phone::Call & call);
+    void init();
 
 private:
     void onIncomingDisconnect();
     void onOutgoingConnect();
     void onOutgoingDisconnect();
+
+    static const QString sAuthor;
+    static const QString sApp;
+
+    static const QString sIncomingDisconnectedVibrate;
+    static const QString sOutgoingConnectedVibrate;
+    static const QString sOutgoingDisconnectedVibrate;
 
 };
 

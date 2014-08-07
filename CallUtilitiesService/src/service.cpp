@@ -25,23 +25,45 @@
 
 #include <QTimer>
 #include <QDebug>
+#include <QSettings>
+#include <QMetaObject>
 
 using namespace bb::system;
 using namespace bb::system::phone;
 using namespace bb::device;
 
+const QString Service::sAuthor = "Mission";
+const QString Service::sApp = "CallUtilities";
+
+const QString Service::sIncomingDisconnectedVibrate = "IncomingDisconnectedVibrate";
+const QString Service::sOutgoingConnectedVibrate = "OutgoingConnectedVibrate";
+const QString Service::sOutgoingDisconnectedVibrate = "OutgoingDisconnectedVibrate";
+
 Service::Service() :
         QObject()
 {
+    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     Phone * phone = new Phone(this);
     connect(phone, SIGNAL(callUpdated(const bb::system::phone::Call &)), this, SLOT(onCallUpdated(const bb::system::phone::Call &)));
+}
+
+void Service::init() {
+    QSettings settings(sAuthor, sApp);
+    if (!settings.contains(sIncomingDisconnectedVibrate)) {
+        settings.setValue(sIncomingDisconnectedVibrate, true);
+    }
+    if (!settings.contains(sOutgoingConnectedVibrate)) {
+        settings.setValue(sOutgoingConnectedVibrate, true);
+    }
+    if (!settings.contains(sOutgoingDisconnectedVibrate)) {
+        settings.setValue(sOutgoingDisconnectedVibrate, true);
+    }
+    settings.sync();
 }
 
 void Service::onCallUpdated(const bb::system::phone::Call & call) {
     CallType::Type type = call.callType();
     CallState::Type state = call.callState();
-
-    qDebug() << "call updated: callId=" << call.callId() << " callType=" << type << " callState=" << state;
 
     if (type == CallType::Incoming) {
         if (state == CallState::Disconnected) {
@@ -55,23 +77,31 @@ void Service::onCallUpdated(const bb::system::phone::Call & call) {
         else if (state == CallState::Disconnected) {
             onOutgoingDisconnect();
         }
-
     }
 
 }
 
 void Service::onIncomingDisconnect() {
-    VibrationController vibration;
-    vibration.start(100, 200);
+    QSettings settings(sAuthor, sApp);
+    if (settings.value(sIncomingDisconnectedVibrate).toBool()) {
+        VibrationController vibration;
+        vibration.start(100, 200);
+    }
 }
 
 void Service::onOutgoingConnect() {
-    VibrationController vibration;
-    vibration.start(100, 200);
+    QSettings settings(sAuthor, sApp);
+    if (settings.value(sOutgoingConnectedVibrate).toBool()) {
+        VibrationController vibration;
+        vibration.start(100, 200);
+    }
 }
 
 void Service::onOutgoingDisconnect() {
-    VibrationController vibration;
-    vibration.start(100, 200);
+    QSettings settings(sAuthor, sApp);
+    if (settings.value(sOutgoingDisconnectedVibrate).toBool()) {
+        VibrationController vibration;
+        vibration.start(100, 200);
+    }
 }
 
