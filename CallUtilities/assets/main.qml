@@ -50,20 +50,22 @@ Page {
                     id: tggVibrateOnIncomingDisconnect
                     horizontalAlignment: HorizontalAlignment.Right
                     onCheckedChanged: {
+                        app.setSetting("IncomingDisconnectedVibrate", checked)
                     }
                     layoutProperties: StackLayoutProperties {
-                    
+
                     }
                     verticalAlignment: VerticalAlignment.Center
-                
+                    checked: app.getSetting("IncomingDisconnectedVibrate").toString()
+
                 }
-            
+
             }
-        
+
         }
-        
+
         Divider {
-        
+
         }
         Label {
             text: "Outgoing calls"
@@ -71,9 +73,9 @@ Page {
             horizontalAlignment: HorizontalAlignment.Center
             textFit.minFontSizeValue: 10.0
             textFit.maxFontSizeValue: 15.0
-        
+
         }
-        
+
         Container {
             horizontalAlignment: HorizontalAlignment.Fill
             rightPadding: 10.0
@@ -81,41 +83,45 @@ Page {
             Container {
                 horizontalAlignment: HorizontalAlignment.Fill
                 layout: DockLayout {
-                
+
                 }
                 Label {
                     text: "Vibrate on connect"
                     verticalAlignment: VerticalAlignment.Center
-                
+
                 }
                 ToggleButton {
                     id: tggVibrateOnOutgoingConnect
                     horizontalAlignment: HorizontalAlignment.Right
                     onCheckedChanged: {
+                        app.setSetting("OutgoingConnectedVibrate", checked)
                     }
                     verticalAlignment: VerticalAlignment.Center
-                
+                    checked: app.getSetting("OutgoingConnectedVibrate").toString()
+
                 }
-            
+
             }
             Container {
                 layout: DockLayout {
-                
+
                 }
                 horizontalAlignment: HorizontalAlignment.Fill
                 topMargin: 10.0
                 Label {
                     text: "Vibrate on disconnect"
                     verticalAlignment: VerticalAlignment.Center
-                
+
                 }
                 ToggleButton {
                     id: tggVibrateOnOutgoingDisconnect
                     horizontalAlignment: HorizontalAlignment.Right
                     onCheckedChanged: {
+                        app.setSetting("OutgoingDisconnectedVibrate", checked)
                     }
                     verticalAlignment: VerticalAlignment.Center
-                
+                    checked: app.getSetting("OutgoingDisconnectedVibrate").toString()
+
                 }
             
             }
@@ -127,7 +133,10 @@ Page {
         Button {
             text: "Close"
             horizontalAlignment: HorizontalAlignment.Center
-        
+            onClicked: {
+                
+            }
+
         }
     }
 }

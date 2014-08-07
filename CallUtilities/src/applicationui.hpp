@@ -19,17 +19,6 @@
 
 #include <QObject>
 
-namespace bb {
-    namespace cascades {
-        class LocaleHandler;
-    }
-    namespace system {
-        class InvokeManager;
-    }
-}
-
-class QTranslator;
-
 /*!
  * @brief Application UI object
  *
@@ -42,14 +31,17 @@ public:
     ApplicationUI();
     virtual ~ApplicationUI() { }
 
-    Q_INVOKABLE void resendNotification();
+    Q_INVOKABLE QVariant getSetting(const QString & key);
+    Q_INVOKABLE void setSetting(const QString & key, const QVariant & value);
 
-private slots:
-    void onSystemLanguageChanged();
 private:
-    QTranslator* m_translator;
-    bb::cascades::LocaleHandler* m_localeHandler;
-    bb::system::InvokeManager* m_invokeManager;
+    static const QString sAuthor;
+    static const QString sApp;
+
+    static const QString sIncomingDisconnectedVibrate;
+    static const QString sOutgoingConnectedVibrate;
+    static const QString sOutgoingDisconnectedVibrate;
+
 };
 
 #endif /* ApplicationUI_HPP_ */

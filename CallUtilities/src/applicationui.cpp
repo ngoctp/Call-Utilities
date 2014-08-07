@@ -19,29 +19,21 @@
 #include <bb/cascades/Application>
 #include <bb/cascades/QmlDocument>
 #include <bb/cascades/AbstractPane>
-#include <bb/cascades/LocaleHandler>
-#include <bb/system/InvokeManager>
+
+#include <QSettings>
 
 using namespace bb::cascades;
-using namespace bb::system;
+
+const QString ApplicationUI::sAuthor = "Mission";
+const QString ApplicationUI::sApp = "CallUtilities";
+
+const QString ApplicationUI::sIncomingDisconnectedVibrate = "IncomingDisconnectedVibrate";
+const QString ApplicationUI::sOutgoingConnectedVibrate = "OutgoingConnectedVibrate";
+const QString ApplicationUI::sOutgoingDisconnectedVibrate = "OutgoingDisconnectedVibrate";
 
 ApplicationUI::ApplicationUI() :
-        QObject(),
-        m_translator(new QTranslator(this)),
-        m_localeHandler(new LocaleHandler(this)),
-        m_invokeManager(new InvokeManager(this))
+        QObject()
 {
-    // prepare the localization
-    if (!QObject::connect(m_localeHandler, SIGNAL(systemLanguageChanged()),
-            this, SLOT(onSystemLanguageChanged()))) {
-        // This is an abnormal situation! Something went wrong!
-        // Add own code to recover here
-        qWarning() << "Recovering from a failed connect()";
-    }
-
-    // initial load
-    onSystemLanguageChanged();
-
     // Create scene document from main.qml asset, the parent is set
     // to ensure the document gets destroyed properly at shut down.
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
@@ -56,22 +48,15 @@ ApplicationUI::ApplicationUI() :
     Application::instance()->setScene(root);
 }
 
-void ApplicationUI::onSystemLanguageChanged()
+QVariant ApplicationUI::getSetting(const QString & key)
 {
-    QCoreApplication::instance()->removeTranslator(m_translator);
-    // Initiate, load and install the application translation files.
-    QString locale_string = QLocale().name();
-    QString file_name = QString("CallUtilities_%1").arg(locale_string);
-    if (m_translator->load(file_name, "app/native/qm")) {
-    QCoreApplication::instance()->installTranslator(m_translator);
-    }
+    QSettings settings(sAuthor, sApp);
+    return settings.value(key);
 }
 
-void ApplicationUI::resendNotification()
+void ApplicationUI::setSetting(const QString & key, const QVariant & value)
 {
-    InvokeRequest request;
-    request.setTarget("com.example.CallUtilitiesService");
-    request.setAction("com.example.CallUtilitiesService.RESET");
-    m_invokeManager->invoke(request);
-    Application::instance()->minimize();
+    QSettings settings(sAuthor, sApp);
+    settings.setValue(key, value);
 }
+
