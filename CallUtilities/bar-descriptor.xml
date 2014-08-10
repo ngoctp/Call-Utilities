@@ -163,6 +163,7 @@
 
     <!-- Request permission to post notification. -->
     <permission>access_phone</permission>
+    <permission>access_led_control</permission>
     <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib" />
     <env var="CASCADES_THEME" value="dark"/>
 

@@ -35,7 +35,16 @@ simulator {
 }
 
 config_pri_assets {
-    OTHER_FILES += $$quote($$BASEDIR/assets/main.qml)
+    OTHER_FILES += \
+        $$quote($$BASEDIR/assets/images/blue.png) \
+        $$quote($$BASEDIR/assets/images/cyan.png) \
+        $$quote($$BASEDIR/assets/images/green.png) \
+        $$quote($$BASEDIR/assets/images/magenta.png) \
+        $$quote($$BASEDIR/assets/images/rainbow.png) \
+        $$quote($$BASEDIR/assets/images/red.png) \
+        $$quote($$BASEDIR/assets/images/white.png) \
+        $$quote($$BASEDIR/assets/images/yellow.png) \
+        $$quote($$BASEDIR/assets/main.qml)
 }
 
 config_pri_source_group1 {
@@ -59,7 +68,10 @@ lupdate_inclusion {
         $$quote($$BASEDIR/../src/*.cxx) \
         $$quote($$BASEDIR/../assets/*.qml) \
         $$quote($$BASEDIR/../assets/*.js) \
-        $$quote($$BASEDIR/../assets/*.qs)
+        $$quote($$BASEDIR/../assets/*.qs) \
+        $$quote($$BASEDIR/../assets/images/*.qml) \
+        $$quote($$BASEDIR/../assets/images/*.js) \
+        $$quote($$BASEDIR/../assets/images/*.qs)
 
     HEADERS += \
         $$quote($$BASEDIR/../src/*.h) \
