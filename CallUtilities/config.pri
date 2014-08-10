@@ -40,6 +40,7 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/cyan.png) \
         $$quote($$BASEDIR/assets/images/green.png) \
         $$quote($$BASEDIR/assets/images/magenta.png) \
+        $$quote($$BASEDIR/assets/images/rainbow.png) \
         $$quote($$BASEDIR/assets/images/red.png) \
         $$quote($$BASEDIR/assets/images/white.png) \
         $$quote($$BASEDIR/assets/images/yellow.png) \

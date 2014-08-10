@@ -111,9 +111,9 @@ Page {
                         }
                     }
                     Option {
-                        text: "Disco"
+                        text: "Rainbow"
                         value: LedColor.None
-                        imageSource: "asset:///images/white.png"
+                        imageSource: "asset:///images/rainbow.png"
                         selected: true
 
                     }
