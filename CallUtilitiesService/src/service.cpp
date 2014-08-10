@@ -22,6 +22,8 @@
 #include <bb/system/phone/CallType>
 #include <bb/system/phone/CallState>
 #include <bb/device/VibrationController>
+#include <bb/device/Led>
+#include <bb/device/LedColor>
 
 #include <QTimer>
 #include <QDebug>
@@ -36,11 +38,14 @@ const QString Service::sAuthor = "Mission";
 const QString Service::sApp = "CallUtilities";
 
 const QString Service::sIncomingDisconnectedVibrate = "IncomingDisconnectedVibrate";
+const QString Service::sIncomingFlashLed = "IncomingFlashLed";
+const QString Service::sIncomingFlashLedColor = "IncomingFlashLedColor";
 const QString Service::sOutgoingConnectedVibrate = "OutgoingConnectedVibrate";
 const QString Service::sOutgoingDisconnectedVibrate = "OutgoingDisconnectedVibrate";
 
 Service::Service() :
-        QObject()
+        QObject(),
+        led(new Led(this))
 {
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     Phone * phone = new Phone(this);
@@ -51,6 +56,12 @@ void Service::init() {
     QSettings settings(sAuthor, sApp);
     if (!settings.contains(sIncomingDisconnectedVibrate)) {
         settings.setValue(sIncomingDisconnectedVibrate, true);
+    }
+    if (!settings.contains(sIncomingFlashLed)) {
+        settings.setValue(sIncomingFlashLed, true);
+    }
+    if (!settings.contains(sIncomingFlashLedColor)) {
+        settings.setValue(sIncomingFlashLedColor, LedColor::None);
     }
     if (!settings.contains(sOutgoingConnectedVibrate)) {
         settings.setValue(sOutgoingConnectedVibrate, true);
@@ -66,7 +77,13 @@ void Service::onCallUpdated(const bb::system::phone::Call & call) {
     CallState::Type state = call.callState();
 
     if (type == CallType::Incoming) {
-        if (state == CallState::Disconnected) {
+        if (state == CallState::Incoming) {
+            onIncoming();
+        }
+        else if (state == CallState::Connected) {
+            onIncomingConnect();
+        }
+        else if (state == CallState::Disconnected) {
             onIncomingDisconnect();
         }
     }
@@ -81,12 +98,34 @@ void Service::onCallUpdated(const bb::system::phone::Call & call) {
 
 }
 
+void Service::onIncoming() {
+    QSettings settings(sAuthor, sApp);
+    if (settings.value(sIncomingFlashLed).toBool()) {
+        LedColor::Type ledColor = static_cast<LedColor::Type>(settings.value(sIncomingFlashLedColor).toInt());
+        if (ledColor == LedColor::None) {
+        }
+        else {
+            led->setColor(ledColor);
+            led->flash();
+        }
+    }
+}
+
+void Service::onIncomingConnect() {
+    // stop flashing Led
+    led->setColor(LedColor::None);
+}
+
 void Service::onIncomingDisconnect() {
     QSettings settings(sAuthor, sApp);
     if (settings.value(sIncomingDisconnectedVibrate).toBool()) {
         VibrationController vibration;
         vibration.start(100, 200);
     }
+
+    // stop flashing Led
+    led->setColor(LedColor::None);
+
 }
 
 void Service::onOutgoingConnect() {
