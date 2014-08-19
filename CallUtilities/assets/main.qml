@@ -15,6 +15,7 @@
  */
 
 import bb.cascades 1.2
+import bb.device 1.2
 
 Page {
     titleBar: TitleBar {
@@ -41,22 +42,127 @@ Page {
                 }
                 horizontalAlignment: HorizontalAlignment.Fill
                 Label {
+                    id: lblVibrateOnIncomingDisconnect
                     text: "Vibrate on disconnect"
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Left
                 
                 }
                 ToggleButton {
-                    id: tggVibrateOnIncomingDisconnect
                     horizontalAlignment: HorizontalAlignment.Right
                     onCheckedChanged: {
                         app.setSetting("IncomingDisconnectedVibrate", checked)
                     }
-                    layoutProperties: StackLayoutProperties {
 
-                    }
                     verticalAlignment: VerticalAlignment.Center
                     checked: app.getSetting("IncomingDisconnectedVibrate").toString()
+                    accessibility.labelledBy: lblVibrateOnIncomingDisconnect
+
+                }
+
+            }
+            Container {
+                layout: DockLayout {
+
+                }
+                horizontalAlignment: HorizontalAlignment.Fill
+                topMargin: 10.0
+                Label {
+                    id: lblFlashLedOnIncoming
+                    text: "Flash LED"
+                    verticalAlignment: VerticalAlignment.Center
+                    horizontalAlignment: HorizontalAlignment.Left
+
+                }
+                ToggleButton {
+                    horizontalAlignment: HorizontalAlignment.Right
+                    onCheckedChanged: {
+                        app.setSetting("IncomingFlashLed", checked)
+                        ddbFlashLedColor.enabled = checked
+                    }
+
+                    verticalAlignment: VerticalAlignment.Center
+                    checked: app.getSetting("IncomingFlashLed").toString()
+                    topMargin: 10.0
+                    accessibility.labelledBy: lblFlashLedOnIncoming
+
+                }
+
+            }
+            Container {
+                layout: DockLayout {
+
+                }
+                horizontalAlignment: HorizontalAlignment.Fill
+                topMargin: 10.0
+                DropDown {
+                    id: ddbFlashLedColor
+                    horizontalAlignment: HorizontalAlignment.Right
+                    preferredWidth: 500.0
+                    title: "Color"
+                    onSelectedIndexChanged: {
+                        app.setSetting("IncomingFlashLedColor", selectedValue)
+                    }
+                    enabled: app.getSetting("IncomingFlashLed").toString()
+                    onCreationCompleted: {
+                        var ledColor = app.getSetting("IncomingFlashLedColor");
+                        var i, numOptions = count();
+                        for (i = 0; i < numOptions; i++) {
+                            if (options[i].value == ledColor) {
+                                options[i].selected = true;
+                                break;
+                            }
+                        }
+                    }
+                    Option {
+                        text: "Rainbow"
+                        value: LedColor.None
+                        imageSource: "asset:///images/rainbow.png"
+                        selected: true
+
+                    }
+                    Option {
+                        text: "Red"
+                        value: LedColor.Red
+                        imageSource: "asset:///images/red.png"
+
+                    }
+                    Option {
+                        text: "Green"
+                        value: LedColor.Green
+                        imageSource: "asset:///images/green.png"
+
+                    }
+                    Option {
+                        text: "Blue"
+                        value: LedColor.Blue
+                        imageSource: "asset:///images/blue.png"
+
+                    }
+                    Option {
+                        text: "Yellow"
+                        value: LedColor.Yellow
+                        imageSource: "asset:///images/yellow.png"
+
+                    }
+                    Option {
+                        text: "Cyan"
+                        value: LedColor.Cyan
+                        imageSource: "asset:///images/cyan.png"
+
+                    }
+                    Option {
+                        text: "Magenta"
+                        value: LedColor.Magenta
+                        imageSource: "asset:///images/magenta.png"
+
+                    }
+                    Option {
+                        text: "White"
+                        value: LedColor.White
+                        imageSource: "asset:///images/white.png"
+
+                    }
 
                 }
 
@@ -65,6 +171,7 @@ Page {
         }
 
         Divider {
+            accessibility.name: "TODO: Add property content"
 
         }
         Label {
@@ -86,18 +193,19 @@ Page {
 
                 }
                 Label {
+                    id: lblVibrateOnOutgoingConnect
                     text: "Vibrate on connect"
                     verticalAlignment: VerticalAlignment.Center
 
                 }
                 ToggleButton {
-                    id: tggVibrateOnOutgoingConnect
                     horizontalAlignment: HorizontalAlignment.Right
                     onCheckedChanged: {
                         app.setSetting("OutgoingConnectedVibrate", checked)
                     }
                     verticalAlignment: VerticalAlignment.Center
                     checked: app.getSetting("OutgoingConnectedVibrate").toString()
+                    accessibility.labelledBy: lblVibrateOnOutgoingConnect
 
                 }
 
@@ -109,33 +217,36 @@ Page {
                 horizontalAlignment: HorizontalAlignment.Fill
                 topMargin: 10.0
                 Label {
+                    id: lblVibrateOnOutgoingDisconnect
                     text: "Vibrate on disconnect"
                     verticalAlignment: VerticalAlignment.Center
 
                 }
                 ToggleButton {
-                    id: tggVibrateOnOutgoingDisconnect
                     horizontalAlignment: HorizontalAlignment.Right
                     onCheckedChanged: {
                         app.setSetting("OutgoingDisconnectedVibrate", checked)
                     }
                     verticalAlignment: VerticalAlignment.Center
                     checked: app.getSetting("OutgoingDisconnectedVibrate").toString()
+                    accessibility.labelledBy: lblVibrateOnOutgoingDisconnect
 
                 }
-            
+
             }
-        
+
         }
         Divider {
-        
+            accessibility.name: "TODO: Add property content"
+
         }
         Button {
             text: "Close"
             horizontalAlignment: HorizontalAlignment.Center
             onClicked: {
-                
+
             }
+            visible: false
 
         }
     }

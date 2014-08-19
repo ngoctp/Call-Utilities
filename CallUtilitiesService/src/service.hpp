@@ -17,6 +17,7 @@
 #ifndef SERVICE_H_
 #define SERVICE_H_
 
+#include <src/RainbowLed.hpp>
 #include <QObject>
 
 namespace bb {
@@ -25,7 +26,14 @@ namespace bb {
         namespace phone {
             class Call;
             class Phone;
+            class CallState;
+            class CallType;
         }
+    }
+    namespace device {
+        class Led;
+        class LedColor;
+        class VibrationController;
     }
 }
 
@@ -41,6 +49,8 @@ private slots:
     void init();
 
 private:
+    void onIncoming();
+    void onIncomingConnect();
     void onIncomingDisconnect();
     void onOutgoingConnect();
     void onOutgoingDisconnect();
@@ -49,8 +59,12 @@ private:
     static const QString sApp;
 
     static const QString sIncomingDisconnectedVibrate;
+    static const QString sIncomingFlashLed;
+    static const QString sIncomingFlashLedColor;
     static const QString sOutgoingConnectedVibrate;
     static const QString sOutgoingDisconnectedVibrate;
+
+    RainbowLed rainbowLed;
 
 };
 
