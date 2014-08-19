@@ -42,6 +42,7 @@ Page {
                 }
                 horizontalAlignment: HorizontalAlignment.Fill
                 Label {
+                    id: lblVibrateOnIncomingDisconnect
                     text: "Vibrate on disconnect"
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Left
@@ -55,6 +56,7 @@ Page {
 
                     verticalAlignment: VerticalAlignment.Center
                     checked: app.getSetting("IncomingDisconnectedVibrate").toString()
+                    accessibility.labelledBy: lblVibrateOnIncomingDisconnect
 
                 }
 
@@ -66,6 +68,7 @@ Page {
                 horizontalAlignment: HorizontalAlignment.Fill
                 topMargin: 10.0
                 Label {
+                    id: lblFlashLedOnIncoming
                     text: "Flash LED"
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Left
@@ -81,6 +84,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     checked: app.getSetting("IncomingFlashLed").toString()
                     topMargin: 10.0
+                    accessibility.labelledBy: lblFlashLedOnIncoming
 
                 }
 
@@ -167,6 +171,7 @@ Page {
         }
 
         Divider {
+            accessibility.name: "TODO: Add property content"
 
         }
         Label {
@@ -188,6 +193,7 @@ Page {
 
                 }
                 Label {
+                    id: lblVibrateOnOutgoingConnect
                     text: "Vibrate on connect"
                     verticalAlignment: VerticalAlignment.Center
 
@@ -199,6 +205,7 @@ Page {
                     }
                     verticalAlignment: VerticalAlignment.Center
                     checked: app.getSetting("OutgoingConnectedVibrate").toString()
+                    accessibility.labelledBy: lblVibrateOnOutgoingConnect
 
                 }
 
@@ -210,6 +217,7 @@ Page {
                 horizontalAlignment: HorizontalAlignment.Fill
                 topMargin: 10.0
                 Label {
+                    id: lblVibrateOnOutgoingDisconnect
                     text: "Vibrate on disconnect"
                     verticalAlignment: VerticalAlignment.Center
 
@@ -221,6 +229,7 @@ Page {
                     }
                     verticalAlignment: VerticalAlignment.Center
                     checked: app.getSetting("OutgoingDisconnectedVibrate").toString()
+                    accessibility.labelledBy: lblVibrateOnOutgoingDisconnect
 
                 }
 
@@ -228,6 +237,7 @@ Page {
 
         }
         Divider {
+            accessibility.name: "TODO: Add property content"
 
         }
         Button {
