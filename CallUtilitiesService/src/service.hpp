@@ -17,6 +17,7 @@
 #ifndef SERVICE_H_
 #define SERVICE_H_
 
+#include <src/RainbowLed.hpp>
 #include <QObject>
 
 namespace bb {
@@ -63,7 +64,7 @@ private:
     static const QString sOutgoingConnectedVibrate;
     static const QString sOutgoingDisconnectedVibrate;
 
-    bb::device::Led * led;
+    RainbowLed rainbowLed;
 
 };
 

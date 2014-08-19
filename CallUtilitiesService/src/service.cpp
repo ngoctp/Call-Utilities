@@ -22,8 +22,6 @@
 #include <bb/system/phone/CallType>
 #include <bb/system/phone/CallState>
 #include <bb/device/VibrationController>
-#include <bb/device/Led>
-#include <bb/device/LedColor>
 
 #include <QTimer>
 #include <QDebug>
@@ -45,7 +43,7 @@ const QString Service::sOutgoingDisconnectedVibrate = "OutgoingDisconnectedVibra
 
 Service::Service() :
         QObject(),
-        led(new Led(this))
+        rainbowLed(new RainbowLed(this))
 {
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     Phone * phone = new Phone(this);
@@ -102,18 +100,14 @@ void Service::onIncoming() {
     QSettings settings(sAuthor, sApp);
     if (settings.value(sIncomingFlashLed).toBool()) {
         LedColor::Type ledColor = static_cast<LedColor::Type>(settings.value(sIncomingFlashLedColor).toInt());
-        if (ledColor == LedColor::None) {
-        }
-        else {
-            led->setColor(ledColor);
-            led->flash();
-        }
+        rainbowLed.setColor(ledColor);
+        rainbowLed.start();
     }
 }
 
 void Service::onIncomingConnect() {
     // stop flashing Led
-    led->setColor(LedColor::None);
+    rainbowLed.stop();
 }
 
 void Service::onIncomingDisconnect() {
@@ -124,7 +118,7 @@ void Service::onIncomingDisconnect() {
     }
 
     // stop flashing Led
-    led->setColor(LedColor::None);
+    rainbowLed.stop();
 
 }
 
@@ -134,6 +128,10 @@ void Service::onOutgoingConnect() {
         VibrationController vibration;
         vibration.start(100, 200);
     }
+
+    // for testing
+//    rainbowLed.setColor(LedColor::None);
+//    rainbowLed.start();
 }
 
 void Service::onOutgoingDisconnect() {
@@ -142,5 +140,8 @@ void Service::onOutgoingDisconnect() {
         VibrationController vibration;
         vibration.start(100, 200);
     }
+
+    // for testing
+//    rainbowLed.stop();
 }
 
