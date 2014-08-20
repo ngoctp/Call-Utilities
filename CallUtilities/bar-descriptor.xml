@@ -103,11 +103,11 @@
     </configuration>
 
     <entryPoint id="CallUtilities">
-        <name>CallUtilities</name>
+        <name>Call Utilities</name>
     </entryPoint>
 
     <entryPoint id="CallUtilitiesService">
-        <name>CallUtilities Service</name>
+        <name>Call Utilities Service</name>
         <entryPointType>Qnx/Elf</entryPointType>
         <!-- Request permission to run a backend headless process. -->
         <permission system="true">_sys_run_headless</permission>
@@ -116,7 +116,7 @@
 
     <invoke-target id="com.example.CallUtilitiesService">
         <invoke-target-type>application.headless</invoke-target-type>
-        <invoke-target-name>CallUtilities Service</invoke-target-name>
+        <invoke-target-name>Call Utilities Service</invoke-target-name>
         <entry-point-id>CallUtilitiesService</entry-point-id>
         <filter>
             <action>bb.action.system.STARTED</action>
@@ -132,7 +132,7 @@
 
     <invoke-target id="com.example.CallUtilities">
         <invoke-target-type>application</invoke-target-type>
-        <invoke-target-name>CallUtilities</invoke-target-name>
+        <invoke-target-name>Call Utilities</invoke-target-name>
         <icon>
             <image>icon.png</image>
         </icon>
