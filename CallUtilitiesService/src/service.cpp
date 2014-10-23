@@ -35,6 +35,7 @@ using namespace bb::device;
 const QString Service::sAuthor = "Mission";
 const QString Service::sApp = "CallUtilities";
 
+const QString Service::sIncomingPocketVibrate = "IncomingPocketVibrate";
 const QString Service::sIncomingDisconnectedVibrate = "IncomingDisconnectedVibrate";
 const QString Service::sIncomingFlashLed = "IncomingFlashLed";
 const QString Service::sIncomingFlashLedColor = "IncomingFlashLedColor";
@@ -43,15 +44,20 @@ const QString Service::sOutgoingDisconnectedVibrate = "OutgoingDisconnectedVibra
 
 Service::Service() :
         QObject(),
-        rainbowLed(new RainbowLed(this))
+        rainbowLed(new RainbowLed(this)),
+        pocketVibrate(new PocketVibrate(this))
 {
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     Phone * phone = new Phone(this);
     connect(phone, SIGNAL(callUpdated(const bb::system::phone::Call &)), this, SLOT(onCallUpdated(const bb::system::phone::Call &)));
+    pocketVibrate.start();
 }
 
 void Service::init() {
     QSettings settings(sAuthor, sApp);
+    if (!settings.contains(sIncomingPocketVibrate)) {
+        settings.setValue(sIncomingPocketVibrate, true);
+    }
     if (!settings.contains(sIncomingDisconnectedVibrate)) {
         settings.setValue(sIncomingDisconnectedVibrate, true);
     }
@@ -73,6 +79,8 @@ void Service::init() {
 void Service::onCallUpdated(const bb::system::phone::Call & call) {
     CallType::Type type = call.callType();
     CallState::Type state = call.callState();
+
+    qDebug() << "CallState::Type: " << state;
 
     if (type == CallType::Incoming) {
         if (state == CallState::Incoming) {
@@ -103,11 +111,16 @@ void Service::onIncoming() {
         rainbowLed.setColor(ledColor);
         rainbowLed.start();
     }
+    if (settings.value(sIncomingPocketVibrate).toBool()) {
+        pocketVibrate.start();
+    }
 }
 
 void Service::onIncomingConnect() {
     // stop flashing Led
     rainbowLed.stop();
+    // stop vibrating
+    pocketVibrate.stop();
 }
 
 void Service::onIncomingDisconnect() {
@@ -119,6 +132,8 @@ void Service::onIncomingDisconnect() {
 
     // stop flashing Led
     rainbowLed.stop();
+    // stop vibrating
+    pocketVibrate.stop();
 
 }
 
@@ -130,6 +145,7 @@ void Service::onOutgoingConnect() {
     }
 
     // for testing
+//    pocketVibrate.start();
 //    rainbowLed.setColor(LedColor::None);
 //    rainbowLed.start();
 }
@@ -142,6 +158,7 @@ void Service::onOutgoingDisconnect() {
     }
 
     // for testing
+//    pocketVibrate.stop();
 //    rainbowLed.stop();
 }
 

@@ -60,3 +60,8 @@ void ApplicationUI::setSetting(const QString & key, const QVariant & value)
     settings.setValue(key, value);
 }
 
+void ApplicationUI::test()
+{
+    qDebug() << "test aAAA";
+}
+

@@ -43,6 +43,32 @@ Page {
                 horizontalAlignment: HorizontalAlignment.Fill
                 Label {
                     id: lblVibrateOnIncomingDisconnect
+                    text: "Pocket vibrate"
+                    verticalAlignment: VerticalAlignment.Center
+                    horizontalAlignment: HorizontalAlignment.Left
+                
+                }
+                ToggleButton {
+                    horizontalAlignment: HorizontalAlignment.Right
+                    onCheckedChanged: {
+                        app.setSetting("IncomingPocketVibrate", checked)
+                    }
+
+                    verticalAlignment: VerticalAlignment.Center
+                    checked: app.getSetting("IncomingPocketVibrate").toString()
+                    accessibility.labelledBy: lblVibrateOnIncomingDisconnect
+
+                }
+
+            }
+            Container {
+                layout: DockLayout {
+                
+                }
+                horizontalAlignment: HorizontalAlignment.Fill
+                topMargin: 10.0
+                Label {
+                    id: lblSmartPocketVibrate
                     text: "Vibrate on disconnect"
                     verticalAlignment: VerticalAlignment.Center
                     horizontalAlignment: HorizontalAlignment.Left
@@ -83,7 +109,6 @@ Page {
 
                     verticalAlignment: VerticalAlignment.Center
                     checked: app.getSetting("IncomingFlashLed").toString()
-                    topMargin: 10.0
                     accessibility.labelledBy: lblFlashLedOnIncoming
 
                 }
@@ -242,6 +267,15 @@ Page {
         }
         Button {
             text: "Close"
+            horizontalAlignment: HorizontalAlignment.Center
+            onClicked: {
+
+            }
+            visible: false
+
+        }
+        Button {
+            text: "Test"
             horizontalAlignment: HorizontalAlignment.Center
             onClicked: {
 

@@ -18,6 +18,7 @@
 #define ApplicationUI_HPP_
 
 #include <QObject>
+#include <QDebug>
 
 /*!
  * @brief Application UI object
@@ -33,6 +34,7 @@ public:
 
     Q_INVOKABLE QVariant getSetting(const QString & key);
     Q_INVOKABLE void setSetting(const QString & key, const QVariant & value);
+    Q_INVOKABLE void test();
 
 private:
     static const QString sAuthor;
