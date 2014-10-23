@@ -13,8 +13,7 @@ using namespace bb::device;
 
 RainbowLed::RainbowLed(QObject * parent)
     : QThread(parent),
-      led(),
-      enabled()
+      led()
 {
 }
 
@@ -26,8 +25,6 @@ void RainbowLed::run() {
     if (led == NULL) {
         led = new Led();
     }
-    qDebug() << "testtttttttttt";
-    int count = 0;
     // rainbow
     if (_ledColor == LedColor::None) {
         QVector<LedColor::Type> * ledColors = new QVector<LedColor::Type>();
@@ -40,22 +37,17 @@ void RainbowLed::run() {
         ledColors->append(LedColor::White);
         int max = ledColors->size();
         int i = -1;
-        enabled = true;
         do {
-            qDebug() << "count: " << ++count;
             i++;
             if (i == max) {
                 i = 0;
-                continue;
             }
-            /*
             led->setColor(ledColors->at(i));
-            led->flash(1);
-            led->cancel();*/
+            led->flash();
             msleep(200);
 
         }
-        while (enabled);
+        while (led->isActive());
     }
     // specific color
     else {
@@ -69,6 +61,5 @@ void RainbowLed::setColor(LedColor::Type ledColor) {
 }
 
 void RainbowLed::stop() {
-    enabled = false;
-    led->cancel();
+    led->setColor(LedColor::None);
 }

@@ -34,7 +34,6 @@ public:
 private:
     bb::device::Led * led;
     bb::device::LedColor::Type _ledColor;
-    bool enabled;
 
 };
 

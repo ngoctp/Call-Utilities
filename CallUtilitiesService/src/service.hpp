@@ -18,7 +18,6 @@
 #define SERVICE_H_
 
 #include <src/RainbowLed.hpp>
-#include <src/PocketVibrate.hpp>
 #include <QObject>
 
 namespace bb {
@@ -59,7 +58,6 @@ private:
     static const QString sAuthor;
     static const QString sApp;
 
-    static const QString sIncomingPocketVibrate;
     static const QString sIncomingDisconnectedVibrate;
     static const QString sIncomingFlashLed;
     static const QString sIncomingFlashLedColor;
@@ -67,7 +65,6 @@ private:
     static const QString sOutgoingDisconnectedVibrate;
 
     RainbowLed rainbowLed;
-    PocketVibrate pocketVibrate;
 
 };
 
